@@ -15,5 +15,5 @@ docs/build
 dist
 *~
 .python-version
-Simulation_Data/
 .idea/
+pythia-data/
