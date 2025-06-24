@@ -1,3 +1,4 @@
+import datetime
 import urllib.request
 from pythia.plugins.nasap.grid import id_at
 from pythia.functions import xy_from_list, xy_from_vector
@@ -11,9 +12,19 @@ def initialize(args, plugins, config):
 
 def ev_load_config(*args, **kwargs):
     config = kwargs.get("full_config")
+    start_year = 0;
+    end_year = 0; 
+    for run in config.get("runs", []):
+        local_start_year = run.get("startYear")
+        local_end_year = run.get("nyers") + local_start_year
+        
+        if start_year == 0 or start_year > local_start_year:
+            start_year = local_start_year
+        if end_year < local_end_year:
+            end_year = local_end_year
+
     visited = set([])
     for run in config.get("runs", []):
-        wsta = run["wsta"] 
         if isinstance(run["sites"], list):
             sites = xy_from_list(run["sites"])
         else:
@@ -24,7 +35,7 @@ def ev_load_config(*args, **kwargs):
                 continue
             visited.add(nasap_id)
 
-            fetch_data('20010101', '20020101', site[0], site[1], f"wth/{nasap_id}.WTH");
+            fetch_data(f"{start_year}0101", f"{end_year}1231", site[0], site[1], f"wth/{nasap_id}.WTH");
 
     return kwargs
 
